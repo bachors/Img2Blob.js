@@ -4,8 +4,8 @@
  * http://ibacor.com/labs/jquery-image-to-blob/
  * Updates will be posted to this site.
  ***********************************************/
-$.fn.img2blob = function(opt = {}) {
-    var defaultopt = {
+$.fn.img2blob = function(a) {
+    var b = {
         watermark: '',
 		fontStyle: 'Arial',
 		fontSize: '30',
@@ -13,55 +13,53 @@ $.fn.img2blob = function(opt = {}) {
 		fontX: 10,
 		fontY: 50
     };
-	opt.watermark = (opt.watermark == undefined ? defaultopt.watermark : opt.watermark);
-	opt.fontStyle = (opt.fontStyle == undefined ? defaultopt.fontStyle : opt.fontStyle);
-	opt.fontSize = (opt.fontSize == undefined ? defaultopt.fontSize : opt.fontSize);
-	opt.fontColor = (opt.fontColor == undefined ? defaultopt.fontColor : opt.fontColor);
-	opt.fontX = (opt.fontX == undefined ? defaultopt.fontX : opt.fontX);
-	opt.fontY = (opt.fontY == undefined ? defaultopt.fontY : opt.fontY);
+	if (typeof a === 'object') {
+		a.watermark = (a.watermark == undefined ? b.watermark : a.watermark);
+		a.fontStyle = (a.fontStyle == undefined ? b.fontStyle : a.fontStyle);
+		a.fontSize  = (a.fontSize  == undefined ? b.fontSize  : a.fontSize);
+		a.fontColor = (a.fontColor == undefined ? b.fontColor : a.fontColor);
+		a.fontX 	= (a.fontX     == undefined ? b.fontX     : a.fontX);
+		a.fontY     = (a.fontY     == undefined ? b.fontY     : a.fontY);
+	} else {
+		a = b;
+	}
 	
-    $(this).each(function(i, a) {
-        var b = $(this).data('img2blob'),
-            c = '.' + $(this).attr('class');
-        getBlobUri(b, function(a) {
-            $(c + ':eq(' + i + ')').attr('src', a)
-        })
-    });
-
-    function getBlobUri(c, d) {
-        var e = new Image();
-        e.onload = function() {
-            var a = document.createElement('canvas');
-            a.width = this.naturalWidth;
-            a.height = this.naturalHeight;
-			var p = a.getContext('2d');
-            p.drawImage(this, 0, 0);
-			if(opt.watermark != ''){
-				p.font = opt.fontSize + 'px ' + opt.fontStyle;
-				p.fillStyle = opt.fontColor;
-				p.fillText(opt.watermark, opt.fontX, opt.fontY);
+    $(this).each(function(i, c) {
+        var d = $(this).data('img2blob'),
+            e = '.' + $(this).attr('class'),
+			f = new Image();
+		f.onload = function() {
+            var g    = document.createElement('canvas');
+            g.width  = f.naturalWidth;
+            g.height = f.naturalHeight;
+			var h    = g.getContext('2d');
+            h.drawImage(f, 0, 0);
+			if(a.watermark != ''){
+				h.font 		= a.fontSize + 'px ' + a.fontStyle;
+				h.fillStyle = a.fontColor;
+				h.fillText(a.watermark, a.fontX, a.fontY);
 			}
-            var b = a.toDataURL('image/png'),
-                binaryImg = DataUriToBinary(b),
-                blobImg = new Blob([binaryImg], {
+            var j = g.toDataURL('image/png'),
+                k = DataUriToBinary(j),
+                l = new Blob([k], {
                     type: 'image/png'
                 }),
-                blobUri = window.URL.createObjectURL(blobImg);
-            d(blobUri)
+                m = window.URL.createObjectURL(l);
+            $(e).eq(i).attr('src', m);
         };
-        e.src = c
-    }
+        f.src = d;
+    });
 
-    function DataUriToBinary(a) {
-        var b = ';base64,';
-        var c = a.indexOf(b) + b.length;
-        var d = a.substring(c);
-        var e = window.atob(d);
-        var f = e.length;
-        var g = new Uint8Array(new ArrayBuffer(f));
-        for (i = 0; i < f; i++) {
-            g[i] = e.charCodeAt(i)
+    function DataUriToBinary(n) {
+        var o = ';base64,',
+			p = n.indexOf(o) + o.length,
+			q = n.substring(p),
+			r = window.atob(q),
+			s = r.length,
+			t = new Uint8Array(new ArrayBuffer(s));
+        for (i = 0; i < s; i++) {
+            t[i] = r.charCodeAt(i);
         }
-        return g
+        return t;
     }
 }

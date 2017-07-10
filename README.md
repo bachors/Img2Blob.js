@@ -36,5 +36,3 @@ $(function() {
 
 <h4>Result</h4>
 <pre>blob:http://...</pre>
-
-<h2><a href="http://ibacor.com/demo/jquery-blob-image-watermark">DEMO</a></h2>
